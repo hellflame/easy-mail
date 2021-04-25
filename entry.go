@@ -24,7 +24,7 @@ func parseAndRun(input []string) error {
 	}
 
 	if args.ShowVersion {
-		fmt.Printf("%s %s\n", NAME, VERSION)
+		fmt.Println(VERSION)
 		return nil
 	}
 	var client gomail.SendCloser
