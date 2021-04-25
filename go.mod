@@ -1,4 +1,4 @@
-module mailall
+module easy-mail
 
 go 1.16
 

@@ -1,4 +1,4 @@
-# mailall
+# easy-mail
 
 这是一个旨在方便终端用户通过程序发送邮件的程序 (自动化程序的重要一环)
 
@@ -13,7 +13,7 @@
 ## 使用说明
 
 ```bash
-usage: maillall [-h|--help] [--from "<value>"] [--to "<value>" [--to "<value>"
+usage: mailall [-h|--help] [--from "<value>"] [--to "<value>" [--to "<value>"
                 ...]] [-s|--subject "<value>"] [-c|--content "<value>"]
                 [--content-path "<value>"] [--content-type "<value>"] [--attach
                 "<value>" [--attach "<value>" ...]] [--smtp "<value>"]
@@ -50,5 +50,5 @@ mailall --from xx@a.b --password you-password --smtp smtp.a.b:587 -g
 
 __用户信息以明文形式存储，需要注意__
 
-若不通过`--smtp`指定 smtp 服务器，则程序会通过发件人邮箱查询 `MX` 记录，并以 `25` 端口作为 smtp 服务器 (发现大多数通过DNS可查询到的`MX` 服务器只支持 25 端口，即未加密端口，安全起见，还是__手动指定支持ssl的smtp服务器__)
+若不通过`--smtp`指定 smtp 服务器，则程序会通过发件人邮箱查询 `MX` 记录，并以 `25` 端口作为 smtp 服务器 (发现大多数通过DNS可查询到的`MX` 服务器只支持 25 端口，即未加密端口，安全起见，还是 __手动指定支持ssl的smtp服务器__ )
 

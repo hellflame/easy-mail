@@ -39,7 +39,7 @@ type TidyArgs struct {
 
 
 func parseArgs(input []string) (args *RawArgs, e error) {
-	parser := argparse.NewParser("mailall", "send mail from command line")
+	parser := argparse.NewParser("easy-mail", "send mail from command line")
 	from := parser.String("", "from", &argparse.Options{Help:"email send from"})
 	to := parser.StringList("", "to", &argparse.Options{Help:"recv address list"})
 	subject := parser.String("s", "subject", &argparse.Options{Help:"email title"})
