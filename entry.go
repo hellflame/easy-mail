@@ -6,9 +6,9 @@ import (
 	"gopkg.in/gomail.v2"
 	"os"
 )
+
 const NAME = "easy-mail"
 const VERSION = "v0.1"
-
 
 func parseAndRun(input []string) error {
 	raw, e := parseArgs(input)
@@ -57,7 +57,6 @@ func parseAndRun(input []string) error {
 	}
 	return gomail.Send(client, msg)
 }
-
 
 func main() {
 	e := parseAndRun(os.Args)

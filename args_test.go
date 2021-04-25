@@ -14,21 +14,21 @@ func Test_Tidy(t *testing.T) {
 		return
 	}
 	_, e = tidyArgs(&RawArgs{
-		To:           []string{"a.b"},
-	})
-	if e == nil{
-		t.Error("failed")
-		return
-	}
-	_, e = tidyArgs(&RawArgs{
-		To:           []string{"w@a.b"},
+		To: []string{"a.b"},
 	})
 	if e == nil {
 		t.Error("failed")
 		return
 	}
 	_, e = tidyArgs(&RawArgs{
-		To:           []string{"w@a.b"},
+		To: []string{"w@a.b"},
+	})
+	if e == nil {
+		t.Error("failed")
+		return
+	}
+	_, e = tidyArgs(&RawArgs{
+		To:      []string{"w@a.b"},
 		Subject: "this is subject",
 	})
 	if e == nil {
@@ -36,27 +36,27 @@ func Test_Tidy(t *testing.T) {
 		return
 	}
 	_, e = tidyArgs(&RawArgs{
-		To:           []string{"w@a.b"},
+		To:      []string{"w@a.b"},
 		Subject: "this is subject",
-		From: "a.com",
+		From:    "a.com",
 	})
 	if e == nil || e.Error() != "invalid from address format" {
 		t.Error("failed")
 		return
 	}
 	_, e = tidyArgs(&RawArgs{
-		To:           []string{"w@a.b"},
+		To:      []string{"w@a.b"},
 		Subject: "this is subject",
-		From: "9@a.com",
+		From:    "9@a.com",
 	})
 	if e == nil {
 		t.Error("failed")
 		return
 	}
 	_, e = tidyArgs(&RawArgs{
-		To:           []string{"w@a.b"},
-		Subject: "this is subject",
-		From: "9@a.com",
+		To:       []string{"w@a.b"},
+		Subject:  "this is subject",
+		From:     "9@a.com",
 		Password: "123456",
 	})
 	if e == nil {
@@ -64,9 +64,9 @@ func Test_Tidy(t *testing.T) {
 		return
 	}
 	args, e := tidyArgs(&RawArgs{
-		To:           []string{"w@a.b"},
-		Subject: "this is subject",
-		From: "9@qq.com",
+		To:       []string{"w@a.b"},
+		Subject:  "this is subject",
+		From:     "9@qq.com",
 		Password: "123456",
 	})
 	if e != nil || args.Password != "123456" {
@@ -78,10 +78,10 @@ func Test_Tidy(t *testing.T) {
 	os.WriteFile(p, []byte("hellflame is fine"), 0600)
 
 	args, e = tidyArgs(&RawArgs{
-		To:           []string{"w@a.b"},
-		Subject: "this is subject",
-		From: "9@qq.com",
-		Password: "123456",
+		To:          []string{"w@a.b"},
+		Subject:     "this is subject",
+		From:        "9@qq.com",
+		Password:    "123456",
 		ContentPath: p,
 	})
 	if e != nil || args.Content != "hellflame is fine" {
@@ -89,11 +89,11 @@ func Test_Tidy(t *testing.T) {
 		return
 	}
 	args, e = tidyArgs(&RawArgs{
-		To:           []string{"w@a.b"},
-		Subject: "this is subject",
-		From: "9@qq.com",
-		Password: "123456",
-		Content: "A",
+		To:          []string{"w@a.b"},
+		Subject:     "this is subject",
+		From:        "9@qq.com",
+		Password:    "123456",
+		Content:     "A",
 		ContentType: "text/html",
 	})
 	if e != nil || args.Content != "A" || args.ContentType == "" {
@@ -101,10 +101,10 @@ func Test_Tidy(t *testing.T) {
 		return
 	}
 	args, e = tidyArgs(&RawArgs{
-		To:           []string{"w@a.b"},
-		Subject: "this is subject",
-		From: "9@qq.com",
-		Password: "123456",
+		To:         []string{"w@a.b"},
+		Subject:    "this is subject",
+		From:       "9@qq.com",
+		Password:   "123456",
 		SMTPServer: "smtp.a.b:253",
 	})
 	if e != nil || args.SMTPHosts[0] != "smtp.a.b" {
@@ -112,10 +112,10 @@ func Test_Tidy(t *testing.T) {
 		return
 	}
 	args, e = tidyArgs(&RawArgs{
-		To:           []string{"w@a.b"},
-		Subject: "this is subject",
-		From: "9@qq.com",
-		Password: "123456",
+		To:         []string{"w@a.b"},
+		Subject:    "this is subject",
+		From:       "9@qq.com",
+		Password:   "123456",
 		SMTPServer: "smtp.a.b",
 	})
 	if e == nil {
@@ -124,7 +124,7 @@ func Test_Tidy(t *testing.T) {
 	}
 	os.WriteFile(DefaultAuthPath, []byte(`{"From": "a@b.c", "Password": "123", "Server": "a.c:26"}`), 0600)
 	args, e = tidyArgs(&RawArgs{
-		To:           []string{"w@a.b"},
+		To:      []string{"w@a.b"},
 		Subject: "this is subject",
 	})
 	if e != nil || args.Password != "123" {
@@ -132,7 +132,6 @@ func Test_Tidy(t *testing.T) {
 		return
 	}
 }
-
 
 func Test_Parse(t *testing.T) {
 	args, e := parseArgs([]string{"start", "-g"})

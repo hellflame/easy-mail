@@ -10,10 +10,9 @@ import (
 	"strings"
 )
 
-
 var DefaultAuthPath = ".mailall.auth"
 
-func init () {
+func init() {
 	home, e := os.UserHomeDir()
 	if e == nil && home != "" {
 		DefaultAuthPath = path.Join(home, DefaultAuthPath)
@@ -36,11 +35,10 @@ func fetchMxHosts(mailBox string) []string {
 	}
 	var hosts []string
 	for _, raw := range rec {
-		hosts = append(hosts, raw.Host[:len(raw.Host) - 1])
+		hosts = append(hosts, raw.Host[:len(raw.Host)-1])
 	}
 	return hosts
 }
-
 
 func fileExist(path string) bool {
 	if _, e := os.Stat(path); e != nil {
@@ -57,9 +55,9 @@ func saveAuth(path, from, password, smtp string) error {
 		return errors.New("not enough to saveAuth")
 	}
 	template := map[string]string{
-		"From": from,
+		"From":     from,
 		"Password": password,
-		"Server": smtp,
+		"Server":   smtp,
 	}
 	dump, e := json.Marshal(&template)
 	if e != nil {

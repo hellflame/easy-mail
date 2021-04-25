@@ -11,49 +11,48 @@ import (
 )
 
 type RawArgs struct {
-	From string
-	To []string
-	Subject string
-	ContentType string
-	Content string
-	ContentPath string
-	Attaches []string
-	SMTPServer string
-	Password string
-	AuthPath string
+	From         string
+	To           []string
+	Subject      string
+	ContentType  string
+	Content      string
+	ContentPath  string
+	Attaches     []string
+	SMTPServer   string
+	Password     string
+	AuthPath     string
 	GenerateAuth bool
-	ShowVersion bool
+	ShowVersion  bool
 }
 
 type TidyArgs struct {
-	From string
-	To []string
-	Subject string
-	Content string
-	ContentType string
-	Attaches []string
-	SMTPHosts []string
-	SMTPPorts []int
-	Password string
+	From         string
+	To           []string
+	Subject      string
+	Content      string
+	ContentType  string
+	Attaches     []string
+	SMTPHosts    []string
+	SMTPPorts    []int
+	Password     string
 	GenerateAuth bool
-	AuthPath string
-	ShowVersion bool
+	AuthPath     string
+	ShowVersion  bool
 }
-
 
 func parseArgs(input []string) (args *RawArgs, e error) {
 	parser := argparse.NewParser(NAME, "easily send mail from command line")
-	from := parser.String("f", "from", &argparse.Options{Help:"email send from"})
-	to := parser.String("t", "to", &argparse.Options{Help:"recv address list, separated by ','"})
-	subject := parser.String("s", "subject", &argparse.Options{Help:"email title"})
+	from := parser.String("f", "from", &argparse.Options{Help: "email send from"})
+	to := parser.String("t", "to", &argparse.Options{Help: "recv address list, separated by ','"})
+	subject := parser.String("s", "subject", &argparse.Options{Help: "email title"})
 	content := parser.String("c", "content", &argparse.Options{Help: "simple email content"})
-	contentPath := parser.String("", "content-path", &argparse.Options{Help:"email content path"})
-	contentType := parser.String("", "content-type", &argparse.Options{Help:"email content type"})
+	contentPath := parser.String("", "content-path", &argparse.Options{Help: "email content path"})
+	contentType := parser.String("", "content-type", &argparse.Options{Help: "email content type"})
 	attach := parser.StringList("", "attach", &argparse.Options{Help: "attach file path list"})
-	smtp := parser.String("", "smtp", &argparse.Options{Help:"manually set smtp address like: smtp.abc.com:587 it can be auto find if not set"})
-	password := parser.String("", "password", &argparse.Options{Help:"email password"})
+	smtp := parser.String("", "smtp", &argparse.Options{Help: "manually set smtp address like: smtp.abc.com:587 it can be auto find if not set"})
+	password := parser.String("", "password", &argparse.Options{Help: "email password"})
 	generateAuth := parser.Flag("g", "generate", &argparse.Options{Help: "generate auth file to simple use"})
-	authPath := parser.String("a", "auth", &argparse.Options{Help:"auth file path"})
+	authPath := parser.String("a", "auth", &argparse.Options{Help: "auth file path"})
 	showVersion := parser.Flag("v", "version", &argparse.Options{Help: fmt.Sprintf("show version of %s", NAME)})
 	if len(input) == 1 {
 		input = append(input, "-h")
@@ -63,22 +62,21 @@ func parseArgs(input []string) (args *RawArgs, e error) {
 		return
 	}
 	args = &RawArgs{
-		From: *from,
-		To: strings.Split(*to, ","),
-		Subject: *subject,
-		Attaches: *attach,
-		SMTPServer: *smtp,
-		Password: *password,
-		AuthPath: *authPath,
+		From:         *from,
+		To:           strings.Split(*to, ","),
+		Subject:      *subject,
+		Attaches:     *attach,
+		SMTPServer:   *smtp,
+		Password:     *password,
+		AuthPath:     *authPath,
 		GenerateAuth: *generateAuth,
-		Content: *content,
-		ContentPath: *contentPath,
-		ContentType: *contentType,
-		ShowVersion: *showVersion,
+		Content:      *content,
+		ContentPath:  *contentPath,
+		ContentType:  *contentType,
+		ShowVersion:  *showVersion,
 	}
 	return
 }
-
 
 func tidyArgs(args *RawArgs) (*TidyArgs, error) {
 	var tidyResult TidyArgs
