@@ -7,6 +7,7 @@ import (
 	"net"
 	"os"
 	"strconv"
+	"strings"
 )
 
 type RawArgs struct {
@@ -21,6 +22,7 @@ type RawArgs struct {
 	Password string
 	AuthPath string
 	GenerateAuth bool
+	ShowVersion bool
 }
 
 type TidyArgs struct {
@@ -35,13 +37,14 @@ type TidyArgs struct {
 	Password string
 	GenerateAuth bool
 	AuthPath string
+	ShowVersion bool
 }
 
 
 func parseArgs(input []string) (args *RawArgs, e error) {
-	parser := argparse.NewParser("easy-mail", "send mail from command line")
-	from := parser.String("", "from", &argparse.Options{Help:"email send from"})
-	to := parser.StringList("", "to", &argparse.Options{Help:"recv address list"})
+	parser := argparse.NewParser(NAME, "easily send mail from command line")
+	from := parser.String("f", "from", &argparse.Options{Help:"email send from"})
+	to := parser.String("t", "to", &argparse.Options{Help:"recv address list, separated by ','"})
 	subject := parser.String("s", "subject", &argparse.Options{Help:"email title"})
 	content := parser.String("c", "content", &argparse.Options{Help: "simple email content"})
 	contentPath := parser.String("", "content-path", &argparse.Options{Help:"email content path"})
@@ -51,6 +54,7 @@ func parseArgs(input []string) (args *RawArgs, e error) {
 	password := parser.String("", "password", &argparse.Options{Help:"email password"})
 	generateAuth := parser.Flag("g", "generate", &argparse.Options{Help: "generate auth file to simple use"})
 	authPath := parser.String("a", "auth", &argparse.Options{Help:"auth file path"})
+	showVersion := parser.Flag("v", "version", &argparse.Options{Help: fmt.Sprintf("show version of %s", NAME)})
 	if len(input) == 1 {
 		input = append(input, "-h")
 	}
@@ -60,7 +64,7 @@ func parseArgs(input []string) (args *RawArgs, e error) {
 	}
 	args = &RawArgs{
 		From: *from,
-		To: *to,
+		To: strings.Split(*to, ","),
 		Subject: *subject,
 		Attaches: *attach,
 		SMTPServer: *smtp,
@@ -70,6 +74,7 @@ func parseArgs(input []string) (args *RawArgs, e error) {
 		Content: *content,
 		ContentPath: *contentPath,
 		ContentType: *contentType,
+		ShowVersion: *showVersion,
 	}
 	return
 }
@@ -77,7 +82,10 @@ func parseArgs(input []string) (args *RawArgs, e error) {
 
 func tidyArgs(args *RawArgs) (*TidyArgs, error) {
 	var tidyResult TidyArgs
-
+	tidyResult.ShowVersion = args.ShowVersion
+	if tidyResult.ShowVersion {
+		return &tidyResult, nil
+	}
 	if args.From != "" {
 		mailBox, valid := validateEmailAddress(args.From)
 		if !valid {

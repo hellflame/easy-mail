@@ -49,7 +49,7 @@ func Test_Tidy(t *testing.T) {
 		Subject: "this is subject",
 		From: "9@a.com",
 	})
-	if e == nil || e.Error() != "failed to set user credentials" {
+	if e == nil {
 		t.Error("failed")
 		return
 	}
@@ -59,7 +59,7 @@ func Test_Tidy(t *testing.T) {
 		From: "9@a.com",
 		Password: "123456",
 	})
-	if e == nil || e.Error() != "failed to set user credentials" {
+	if e == nil {
 		t.Error("fialed")
 		return
 	}

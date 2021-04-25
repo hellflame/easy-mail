@@ -6,6 +6,8 @@ import (
 	"gopkg.in/gomail.v2"
 	"os"
 )
+const NAME = "easy-mail"
+const VERSION = "v0.1"
 
 
 func parseAndRun(input []string) error {
@@ -21,6 +23,10 @@ func parseAndRun(input []string) error {
 		return saveAuth(args.AuthPath, args.From, args.Password, fmt.Sprintf("%s:%d", args.SMTPHosts[0], args.SMTPPorts[0]))
 	}
 
+	if args.ShowVersion {
+		fmt.Printf("%s %s\n", NAME, VERSION)
+		return nil
+	}
 	var client gomail.SendCloser
 	for _, host := range args.SMTPHosts {
 		for _, port := range args.SMTPPorts {
