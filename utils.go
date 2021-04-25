@@ -65,7 +65,7 @@ func saveAuth(path, from, password, smtp string) error {
 	if e != nil {
 		return e
 	}
-	return os.WriteFile(path, dump, 0400)
+	return os.WriteFile(path, dump, 0600)
 }
 
 func loadAuth(path string) (from, password, host string, port int, e error) {

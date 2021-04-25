@@ -39,7 +39,7 @@ type TidyArgs struct {
 
 
 func parseArgs(input []string) (args *RawArgs, e error) {
-	parser := argparse.NewParser("maillall", "send mail from command line")
+	parser := argparse.NewParser("mailall", "send mail from command line")
 	from := parser.String("", "from", &argparse.Options{Help:"email send from"})
 	to := parser.StringList("", "to", &argparse.Options{Help:"recv address list"})
 	subject := parser.String("s", "subject", &argparse.Options{Help:"email title"})
@@ -85,7 +85,11 @@ func tidyArgs(args *RawArgs) (*TidyArgs, error) {
 		}
 		tidyResult.From = args.From
 		if args.SMTPServer == "" {
-			tidyResult.SMTPHosts = fetchMxHosts(mailBox)
+			hosts := fetchMxHosts(mailBox)
+			if len(hosts) == 0 {
+				return nil, fmt.Errorf("can't find mx servers for %s", mailBox)
+			}
+			tidyResult.SMTPHosts = hosts
 			tidyResult.SMTPPorts = []int{25, 465, 587}
 		}
 	}
@@ -101,6 +105,7 @@ func tidyArgs(args *RawArgs) (*TidyArgs, error) {
 		tidyResult.SMTPHosts = []string{host}
 		tidyResult.SMTPPorts = []int{port}
 	}
+	tidyResult.GenerateAuth = args.GenerateAuth
 	if args.GenerateAuth {
 		return &tidyResult, nil
 	}
