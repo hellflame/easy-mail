@@ -1,4 +1,4 @@
-module easy-mail
+module github.com/hellflame/easy-mail
 
 go 1.16
 

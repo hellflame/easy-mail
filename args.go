@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/akamensky/argparse"
+	"io/ioutil"
 	"net"
-	"os"
 	"strconv"
 	"strings"
 )
@@ -151,7 +151,7 @@ func tidyArgs(args *RawArgs) (*TidyArgs, error) {
 
 	if args.Content == "" {
 		if args.ContentPath != "" {
-			content, e := os.ReadFile(args.ContentPath)
+			content, e := ioutil.ReadFile(args.ContentPath)
 			if e != nil {
 				return nil, e
 			}

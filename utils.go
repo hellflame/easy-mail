@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"io/ioutil"
 	"net"
 	"os"
 	"path"
@@ -63,14 +64,14 @@ func saveAuth(path, from, password, smtp string) error {
 	if e != nil {
 		return e
 	}
-	return os.WriteFile(path, dump, 0600)
+	return ioutil.WriteFile(path, dump, 0600)
 }
 
 func loadAuth(path string) (from, password, host string, port int, e error) {
 	if path == "" {
 		path = DefaultAuthPath
 	}
-	read, e := os.ReadFile(path)
+	read, e := ioutil.ReadFile(path)
 	if e != nil {
 		return
 	}
