@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-var DefaultAuthPath = ".mailall.auth"
+var DefaultAuthPath = ".easy-mail.cred"
 
 func init() {
 	home, e := os.UserHomeDir()
