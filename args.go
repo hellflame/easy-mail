@@ -96,7 +96,12 @@ func tidyArgs(args *RawArgs) (*TidyArgs, error) {
 				return nil, fmt.Errorf("can't find mx servers for %s", mailBox)
 			}
 			left := strings.Split(hosts[0], ".")[1:] // this is a possible smtp server
-			tidyResult.SMTPHosts = append([]string{strings.Join(append([]string{"smtp"}, left...), ".")}, hosts...)
+			possibleByMX := strings.Join(left, ".")
+            hosts = append([]string{fmt.Sprintf("smtp.%s", mailBox)}, hosts...)
+			if possibleByMX != mailBox {
+                hosts = append([]string{fmt.Sprintf("smtp.%s", possibleByMX)}, hosts...)
+            }
+			tidyResult.SMTPHosts = hosts
 			tidyResult.SMTPPorts = []int{465, 25, 587}
 		}
 	}
