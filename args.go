@@ -95,8 +95,9 @@ func tidyArgs(args *RawArgs) (*TidyArgs, error) {
 			if len(hosts) == 0 {
 				return nil, fmt.Errorf("can't find mx servers for %s", mailBox)
 			}
-			tidyResult.SMTPHosts = hosts
-			tidyResult.SMTPPorts = []int{25, 465, 587}
+			left := strings.Split(hosts[0], ".")[1:] // this is a possible smtp server
+			tidyResult.SMTPHosts = append([]string{strings.Join(append([]string{"smtp"}, left...), ".")}, hosts...)
+			tidyResult.SMTPPorts = []int{465, 25, 587}
 		}
 	}
 	if args.Password != "" {

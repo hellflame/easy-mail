@@ -8,7 +8,7 @@ import (
 )
 
 const NAME = "easy-mail"
-const VERSION = "v0.2"
+const VERSION = "v0.3"
 
 func parseAndRun(input []string) error {
 	raw, e := parseArgs(input)
