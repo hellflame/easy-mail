@@ -27,15 +27,15 @@ Arguments:
   -h  --help          Print help information
   -f  --from          email send from
   -t  --to            recv address list, separated by ','
-  -s  --subject       email title
-  -c  --content       simple email content
+  -s  --subject       email subject
+  -c  --content       email content
       --content-path  email content path
       --content-type  email content type
       --attach        attach file path list
-      --smtp          manually set smtp address like: smtp.abc.com:587 it can
+      --smtp          manually set smtp address like: smtp.abc.com:465 it can
                       be auto find if not set
       --password      email password
-  -g  --generate      generate auth file to simple use
+  -g  --generate      save auth to file for simple use
   -a  --auth          auth file path
   -v  --version       show version of easy-mail
 ```
