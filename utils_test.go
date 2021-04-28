@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"path"
+	"strings"
 	"testing"
 )
 
@@ -43,5 +44,17 @@ func Test_validateEmailAddress(t *testing.T) {
 	host, valid := validateEmailAddress("hellflame@66.com")
 	if !valid || host != "66.com" {
 		t.Error("failed to validate address")
+	}
+}
+
+func Test_guessSmtpHosts(t *testing.T) {
+	hasSmtp := false
+	for _, host := range guessSmtpHosts("qq.com") {
+		if strings.HasPrefix(host, "smtp.") {
+			hasSmtp = true
+		}
+	}
+	if !hasSmtp {
+		t.Error("failed to add smtp")
 	}
 }

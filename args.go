@@ -44,14 +44,14 @@ func parseArgs(input []string) (args *RawArgs, e error) {
 	parser := argparse.NewParser(NAME, "easily send mail from command line")
 	from := parser.String("f", "from", &argparse.Options{Help: "email send from"})
 	to := parser.String("t", "to", &argparse.Options{Help: "recv address list, separated by ','"})
-	subject := parser.String("s", "subject", &argparse.Options{Help: "email title"})
-	content := parser.String("c", "content", &argparse.Options{Help: "simple email content"})
+	subject := parser.String("s", "subject", &argparse.Options{Help: "email subject"})
+	content := parser.String("c", "content", &argparse.Options{Help: "email content"})
 	contentPath := parser.String("", "content-path", &argparse.Options{Help: "email content path"})
 	contentType := parser.String("", "content-type", &argparse.Options{Help: "email content type"})
 	attach := parser.StringList("", "attach", &argparse.Options{Help: "attach file path list"})
-	smtp := parser.String("", "smtp", &argparse.Options{Help: "manually set smtp address like: smtp.abc.com:587 it can be auto find if not set"})
+	smtp := parser.String("", "smtp", &argparse.Options{Help: "manually set smtp address like: smtp.abc.com:465 it can be auto find if not set"})
 	password := parser.String("", "password", &argparse.Options{Help: "email password"})
-	generateAuth := parser.Flag("g", "generate", &argparse.Options{Help: "generate auth file to simple use"})
+	generateAuth := parser.Flag("g", "generate", &argparse.Options{Help: "save auth to file for simple use"})
 	authPath := parser.String("a", "auth", &argparse.Options{Help: "auth file path"})
 	showVersion := parser.Flag("v", "version", &argparse.Options{Help: fmt.Sprintf("show version of %s", NAME)})
 	if len(input) == 1 {
@@ -91,16 +91,11 @@ func tidyArgs(args *RawArgs) (*TidyArgs, error) {
 		}
 		tidyResult.From = args.From
 		if args.SMTPServer == "" {
-			hosts := fetchMxHosts(mailBox)
+			hosts := guessSmtpHosts(mailBox)
 			if len(hosts) == 0 {
 				return nil, fmt.Errorf("can't find mx servers for %s", mailBox)
 			}
-			left := strings.Split(hosts[0], ".")[1:] // this is a possible smtp server
-			possibleByMX := strings.Join(left, ".")
-            hosts = append([]string{fmt.Sprintf("smtp.%s", mailBox)}, hosts...)
-			if possibleByMX != mailBox {
-                hosts = append([]string{fmt.Sprintf("smtp.%s", possibleByMX)}, hosts...)
-            }
+
 			tidyResult.SMTPHosts = hosts
 			tidyResult.SMTPPorts = []int{465, 25, 587}
 		}

@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net"
 	"os"
@@ -91,4 +92,27 @@ func loadAuth(path string) (from, password, host string, port int, e error) {
 		return
 	}
 	return
+}
+
+// find possible smtp servers
+func guessSmtpHosts(mailBox string) []string {
+	hosts := fetchMxHosts(mailBox)
+	if len(hosts) == 0 {
+		return nil
+	}
+	straight := fmt.Sprintf("smtp.%s", mailBox)
+	hosts = append([]string{straight}, hosts...)
+	hostPool := map[string]int8{
+		mailBox:  1,
+		straight: 1,
+	}
+	for _, host := range hosts {
+		left := strings.Split(host, ".")[1:]
+		possibleByMX := strings.Join(left, ".")
+		if _, exist := hostPool[possibleByMX]; !exist {
+			hosts = append([]string{fmt.Sprintf("smtp.%s", possibleByMX)}, hosts...)
+			hostPool[possibleByMX] = 1
+		}
+	}
+	return hosts
 }

@@ -8,17 +8,9 @@ import (
 )
 
 const NAME = "easy-mail"
-const VERSION = "v0.3.1"
+const VERSION = "v0.3.2"
 
-func parseAndRun(input []string) error {
-	raw, e := parseArgs(input)
-	if e != nil {
-		return e
-	}
-	args, e := tidyArgs(raw)
-	if e != nil {
-		return e
-	}
+func Run(args *TidyArgs) error {
 	if args.GenerateAuth {
 		return saveAuth(args.AuthPath, args.From, args.Password, fmt.Sprintf("%s:%d", args.SMTPHosts[0], args.SMTPPorts[0]))
 	}
@@ -28,6 +20,7 @@ func parseAndRun(input []string) error {
 		return nil
 	}
 	var client gomail.SendCloser
+	var e error
 	for _, host := range args.SMTPHosts {
 		for _, port := range args.SMTPPorts {
 			d := gomail.NewDialer(host, port, args.From, args.Password)
@@ -56,6 +49,18 @@ func parseAndRun(input []string) error {
 		msg.Attach(attach)
 	}
 	return gomail.Send(client, msg)
+}
+
+func parseAndRun(input []string) error {
+	raw, e := parseArgs(input)
+	if e != nil {
+		return e
+	}
+	args, e := tidyArgs(raw)
+	if e != nil {
+		return e
+	}
+	return Run(args)
 }
 
 func main() {
