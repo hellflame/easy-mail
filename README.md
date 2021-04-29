@@ -8,7 +8,18 @@
 * 可选保存发送方信息
 * 可作为普通发件客户端
 
+场景:
+
+* 自动化发布非结构化消息
+* 手动执行，发送服务器文件数据到指定用户
+
 > thanks to gomail
+
+## 安装方式
+
+```bash
+go get github.com/hellflame/easy-mail
+```
 
 ## 使用说明
 
