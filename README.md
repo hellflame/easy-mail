@@ -17,8 +17,28 @@
 
 ## 安装方式
 
+* 如果有golang环境，可以通过 `go get` 安装
+
 ```bash
 go get github.com/hellflame/easy-mail
+```
+
+* 也可以下载静态编译的可执行文件
+
+从这里下载最新: [release](https://github.com/hellflame/easy-mail/releases)
+
+将对应操作系统的可执行文件下载下来，解压或直接可用
+
+```bash
+unzip easy-mail-linux.zip
+# or mac os
+# unzip easy-mail-darwin.zip
+
+# 直接执行
+./easy-mail
+
+# 拷贝至某一个可执行文件查询路径中
+mv easy-mail /usr/local/bin
 ```
 
 ## 使用说明
