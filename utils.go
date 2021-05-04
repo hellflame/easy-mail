@@ -7,19 +7,10 @@ import (
 	"io/ioutil"
 	"net"
 	"os"
-	"path"
 	"strconv"
 	"strings"
 )
 
-var DefaultAuthPath = ".easy-mail.cred"
-
-func init() {
-	home, e := os.UserHomeDir()
-	if e == nil && home != "" {
-		DefaultAuthPath = path.Join(home, DefaultAuthPath)
-	}
-}
 
 func validateEmailAddress(address string) (mailbox string, valid bool) {
 	splits := strings.Split(address, "@")
@@ -50,9 +41,6 @@ func fileExist(path string) bool {
 }
 
 func saveAuth(path, from, password, smtp string) error {
-	if path == "" {
-		path = DefaultAuthPath
-	}
 	if from == "" || password == "" || smtp == "" {
 		return errors.New("not enough to saveAuth")
 	}
@@ -69,9 +57,6 @@ func saveAuth(path, from, password, smtp string) error {
 }
 
 func loadAuth(path string) (from, password, host string, port int, e error) {
-	if path == "" {
-		path = DefaultAuthPath
-	}
 	read, e := ioutil.ReadFile(path)
 	if e != nil {
 		return

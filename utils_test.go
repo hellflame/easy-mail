@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
-	"path"
-	"strings"
-	"testing"
+    "fmt"
+    "path"
+    "strings"
+    "testing"
 )
 
 func Test_fetchMxHosts(t *testing.T) {
@@ -28,12 +28,12 @@ func Test_fileExist(t *testing.T) {
 }
 
 func Test_SaveLoadAuth(t *testing.T) {
-	DefaultAuthPath = path.Join(t.TempDir(), "auth")
-	if e := saveAuth("", "hellflame@a.b", "password", "smtp.a.b:25"); e != nil {
+    p := path.Join(t.TempDir(), "cred")
+	if e := saveAuth(p, "hellflame@a.b", "password", "smtp.a.b:25"); e != nil {
 		t.Error(e.Error())
 		return
 	}
-	from, password, host, port, e := loadAuth("")
+	from, password, host, port, e := loadAuth(p)
 	if e != nil || from == "" || password == "" || host == "" || port == 0 {
 		t.Error("failed to load")
 		return

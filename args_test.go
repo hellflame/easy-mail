@@ -7,7 +7,7 @@ import (
 )
 
 func Test_Tidy(t *testing.T) {
-	DefaultAuthPath = path.Join(t.TempDir(), "not-exist")
+	DefaultAuthPath := path.Join(t.TempDir(), "not-exist")
 	_, e := tidyArgs(&RawArgs{})
 	if e == nil {
 		t.Error("failed")
@@ -32,15 +32,6 @@ func Test_Tidy(t *testing.T) {
 		Subject: "this is subject",
 	})
 	if e == nil {
-		t.Error("failed")
-		return
-	}
-	_, e = tidyArgs(&RawArgs{
-		To:      []string{"w@a.b"},
-		Subject: "this is subject",
-		From:    "a.com",
-	})
-	if e == nil || e.Error() != "invalid from address format" {
 		t.Error("failed")
 		return
 	}
@@ -111,21 +102,12 @@ func Test_Tidy(t *testing.T) {
 		t.Error("failed to set smtp server")
 		return
 	}
-	args, e = tidyArgs(&RawArgs{
-		To:         []string{"w@a.b"},
-		Subject:    "this is subject",
-		From:       "9@qq.com",
-		Password:   "123456",
-		SMTPServer: "smtp.a.b",
-	})
-	if e == nil {
-		t.Error("failed to tell bad smtp server")
-		return
-	}
+
 	ioutil.WriteFile(DefaultAuthPath, []byte(`{"From": "a@b.c", "Password": "123", "Server": "a.c:26"}`), 0600)
 	args, e = tidyArgs(&RawArgs{
 		To:      []string{"w@a.b"},
 		Subject: "this is subject",
+		AuthPath: DefaultAuthPath,
 	})
 	if e != nil || args.Password != "123" {
 		t.Error("failed to load saved auth")
@@ -134,7 +116,7 @@ func Test_Tidy(t *testing.T) {
 }
 
 func Test_Parse(t *testing.T) {
-	args, e := parseArgs([]string{"start", "-g"})
+	args, e := parseArgs([]string{"-g"})
 	if e != nil || !args.GenerateAuth {
 		t.Error("failed to parse args")
 		return

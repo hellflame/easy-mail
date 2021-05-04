@@ -1,13 +1,14 @@
 package main
 
 import (
-	"errors"
-	"fmt"
-	"github.com/akamensky/argparse"
-	"io/ioutil"
-	"net"
-	"strconv"
-	"strings"
+    "errors"
+    "fmt"
+    "github.com/hellflame/argparse"
+    "io/ioutil"
+    "net"
+    "os"
+    "path"
+    "strconv"
 )
 
 type RawArgs struct {
@@ -41,29 +42,46 @@ type TidyArgs struct {
 }
 
 func parseArgs(input []string) (args *RawArgs, e error) {
-	parser := argparse.NewParser(NAME, "easily send mail from command line")
-	from := parser.String("f", "from", &argparse.Options{Help: "email send from"})
-	to := parser.String("t", "to", &argparse.Options{Help: "recv address list, separated by ','"})
-	subject := parser.String("s", "subject", &argparse.Options{Help: "email subject"})
-	content := parser.String("c", "content", &argparse.Options{Help: "email content"})
-	contentPath := parser.String("", "content-path", &argparse.Options{Help: "email content path"})
-	contentType := parser.String("", "content-type", &argparse.Options{Help: "email content type"})
-	attach := parser.StringList("", "attach", &argparse.Options{Help: "attach file path list"})
-	smtp := parser.String("", "smtp", &argparse.Options{Help: "manually set smtp address like: smtp.abc.com:465 it can be auto find if not set"})
-	password := parser.String("", "password", &argparse.Options{Help: "email password"})
-	generateAuth := parser.Flag("g", "generate", &argparse.Options{Help: "save auth to file for simple use"})
-	authPath := parser.String("a", "auth", &argparse.Options{Help: "auth file path"})
-	showVersion := parser.Flag("v", "version", &argparse.Options{Help: fmt.Sprintf("show version of %s", NAME)})
-	if len(input) == 1 {
-		input = append(input, "-h")
-	}
+    DefaultAuthPath := ".easy-mail.cred"
+    home, e := os.UserHomeDir()
+    if e == nil && home != "" {
+        DefaultAuthPath = path.Join(home, DefaultAuthPath)
+    }
+    emailValidator := func(email string) error {
+        if _, ok := validateEmailAddress(email); !ok {
+            return fmt.Errorf("invalid email '%s'", email)
+        }
+        return nil
+    }
+	parser := argparse.NewParser(NAME, "easily send mail from command line",
+	    &argparse.ParserConfig{EpiLog: "more info @ https://github.com/hellflame/easy-mail"})
+	from := parser.String("f", "from", &argparse.Option{Help: "email send from", Validate: emailValidator})
+	to := parser.Strings("t", "to", &argparse.Option{Help: "recv address list", Validate: emailValidator})
+	subject := parser.String("s", "subject", &argparse.Option{Help: "email subject"})
+	content := parser.String("c", "content", &argparse.Option{Help: "email content"})
+	contentPath := parser.String("", "content-path", &argparse.Option{Help: "email content path", Meta: "PATH"})
+	contentType := parser.String("", "content-type", &argparse.Option{Help: "email content type", Meta: "TYPE", Default: "text/plain"})
+	attach := parser.Strings("", "attach", &argparse.Option{Help: "attach file path list"})
+	smtp := parser.String("", "smtp", &argparse.Option{Help: "manually set smtp address like: smtp.abc.com:465 it can be auto find if not set",
+	    Validate: func(arg string) error {
+            _, _, e := net.SplitHostPort(arg)
+            if e != nil {
+                return fmt.Errorf("invalid smtp server: %s", e.Error())
+            }
+            return nil
+    }})
+	password := parser.String("p", "password", &argparse.Option{Help: "email password"})
+	generateAuth := parser.Flag("g", "generate", &argparse.Option{Help: "save auth to file for simple use"})
+	authPath := parser.String("a", "auth", &argparse.Option{Help: "auth file path", Default: DefaultAuthPath, Meta: "PATH"})
+	showVersion := parser.Flag("v", "version", &argparse.Option{Help: fmt.Sprintf("show version of %s", NAME)})
 	e = parser.Parse(input)
 	if e != nil {
+	    fmt.Println(e.Error())
 		return
 	}
 	args = &RawArgs{
 		From:         *from,
-		To:           strings.Split(*to, ","),
+		To:           *to,
 		Subject:      *subject,
 		Attaches:     *attach,
 		SMTPServer:   *smtp,
@@ -79,16 +97,22 @@ func parseArgs(input []string) (args *RawArgs, e error) {
 }
 
 func tidyArgs(args *RawArgs) (*TidyArgs, error) {
-	var tidyResult TidyArgs
-	tidyResult.ShowVersion = args.ShowVersion
+	tidyResult := TidyArgs{
+	    ShowVersion: args.ShowVersion,
+        Password: args.Password,
+        GenerateAuth: args.GenerateAuth,
+        To: args.To,
+        Subject: args.Subject,
+        Content: args.Content,
+        Attaches: args.Attaches,
+        AuthPath: args.AuthPath,
+        ContentType: args.ContentType,
+    }
 	if tidyResult.ShowVersion {
 		return &tidyResult, nil
 	}
 	if args.From != "" {
-		mailBox, valid := validateEmailAddress(args.From)
-		if !valid {
-			return nil, fmt.Errorf("invalid from address format")
-		}
+		mailBox, _ := validateEmailAddress(args.From)
 		tidyResult.From = args.From
 		if args.SMTPServer == "" {
 			hosts := guessSmtpHosts(mailBox)
@@ -100,19 +124,12 @@ func tidyArgs(args *RawArgs) (*TidyArgs, error) {
 			tidyResult.SMTPPorts = []int{465, 25, 587}
 		}
 	}
-	if args.Password != "" {
-		tidyResult.Password = args.Password
-	}
 	if args.SMTPServer != "" {
-		host, p, e := net.SplitHostPort(args.SMTPServer)
-		if e != nil {
-			return nil, fmt.Errorf("invalid smtp server: %s", e.Error())
-		}
-		port, e := strconv.Atoi(p)
+		host, p, _ := net.SplitHostPort(args.SMTPServer)
+		port, _ := strconv.Atoi(p)
 		tidyResult.SMTPHosts = []string{host}
 		tidyResult.SMTPPorts = []int{port}
 	}
-	tidyResult.GenerateAuth = args.GenerateAuth
 	if args.GenerateAuth {
 		return &tidyResult, nil
 	}
@@ -133,23 +150,6 @@ func tidyArgs(args *RawArgs) (*TidyArgs, error) {
 		return nil, errors.New("failed to set user credentials")
 	}
 
-	if len(args.To) == 0 {
-		return nil, errors.New("no one to send to")
-	} else {
-		for _, to := range args.To {
-			if _, ok := validateEmailAddress(to); !ok {
-				return nil, fmt.Errorf("address invalid: %s", to)
-			}
-		}
-		tidyResult.To = args.To
-	}
-
-	if args.Subject == "" {
-		return nil, errors.New("you need a subject")
-	} else {
-		tidyResult.Subject = args.Subject
-	}
-
 	if args.Content == "" {
 		if args.ContentPath != "" {
 			content, e := ioutil.ReadFile(args.ContentPath)
@@ -158,18 +158,7 @@ func tidyArgs(args *RawArgs) (*TidyArgs, error) {
 			}
 			tidyResult.Content = string(content)
 		}
-	} else {
-		tidyResult.Content = args.Content
 	}
 
-	tidyResult.Attaches = args.Attaches
-	tidyResult.GenerateAuth = args.GenerateAuth
-	tidyResult.AuthPath = args.AuthPath
-
-	if args.ContentType != "" {
-		tidyResult.ContentType = args.ContentType
-	} else {
-		tidyResult.ContentType = "text/plain"
-	}
 	return &tidyResult, nil
 }

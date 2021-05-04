@@ -1,14 +1,13 @@
 package main
 
 import (
-	"errors"
-	"fmt"
-	"gopkg.in/gomail.v2"
-	"os"
+    "errors"
+    "fmt"
+    "gopkg.in/gomail.v2"
 )
 
 const NAME = "easy-mail"
-const VERSION = "v0.3.2"
+const VERSION = "v0.4.0"
 
 func Run(args *TidyArgs) error {
 	if args.GenerateAuth {
@@ -64,7 +63,7 @@ func parseAndRun(input []string) error {
 }
 
 func main() {
-	e := parseAndRun(os.Args)
+	e := parseAndRun(nil)
 	if e != nil {
 		fmt.Println(e.Error())
 	}
