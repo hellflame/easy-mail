@@ -1,10 +1,10 @@
 package main
 
 import (
-    "fmt"
-    "path"
-    "strings"
-    "testing"
+	"fmt"
+	"path"
+	"strings"
+	"testing"
 )
 
 func Test_fetchMxHosts(t *testing.T) {
@@ -28,7 +28,7 @@ func Test_fileExist(t *testing.T) {
 }
 
 func Test_SaveLoadAuth(t *testing.T) {
-    p := path.Join(t.TempDir(), "cred")
+	p := path.Join(t.TempDir(), "cred")
 	if e := saveAuth(p, "hellflame@a.b", "password", "smtp.a.b:25"); e != nil {
 		t.Error(e.Error())
 		return

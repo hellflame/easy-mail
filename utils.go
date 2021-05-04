@@ -11,7 +11,6 @@ import (
 	"strings"
 )
 
-
 func validateEmailAddress(address string) (mailbox string, valid bool) {
 	splits := strings.Split(address, "@")
 	if len(splits) != 2 {

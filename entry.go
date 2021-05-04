@@ -1,9 +1,9 @@
 package main
 
 import (
-    "errors"
-    "fmt"
-    "gopkg.in/gomail.v2"
+	"errors"
+	"fmt"
+	"gopkg.in/gomail.v2"
 )
 
 const NAME = "easy-mail"

@@ -105,8 +105,8 @@ func Test_Tidy(t *testing.T) {
 
 	ioutil.WriteFile(DefaultAuthPath, []byte(`{"From": "a@b.c", "Password": "123", "Server": "a.c:26"}`), 0600)
 	args, e = tidyArgs(&RawArgs{
-		To:      []string{"w@a.b"},
-		Subject: "this is subject",
+		To:       []string{"w@a.b"},
+		Subject:  "this is subject",
 		AuthPath: DefaultAuthPath,
 	})
 	if e != nil || args.Password != "123" {
