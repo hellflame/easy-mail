@@ -17,34 +17,19 @@ jobs:
       with:
         go-version: 1.15
         
-    - name: Set up GOPATH
-      run: |
-        echo "GOPATH=${{ github.workspace }}" >> "$GITHUB_ENV"
-        echo "${{ github.workspace }}/bin" >> "$GITHUB_PATH"
-    
-    - name: Check out
+    - name: Check out code
       uses: actions/checkout@v2
-      with:
-          path: src/github.com/hellflame/easy-mail
-          
     - name: Install dependencies
       run: |
         go mod download
-
-    - name: Build
-      run: go build -v ./...
-      
     - name: Run Unit tests
       run: |
         go test -race -covermode atomic -coverprofile=covprofile ./...
-      working-directory: src/github.com/hellflame/easy-mail
-    
     - name: Install goveralls
       env:
         GO111MODULE: off
       run: go get github.com/mattn/goveralls
-    
     - name: Send coverage
+      env:
+        COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: goveralls -coverprofile=covprofile -service=github
-      working-directory: src/github.com/hellflame/easy-mail
-  
