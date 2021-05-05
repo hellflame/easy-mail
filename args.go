@@ -61,7 +61,7 @@ func parseArgs(input []string) (args *RawArgs, e error) {
 	content := parser.String("c", "content", &argparse.Option{Help: "email content"})
 	contentPath := parser.String("", "content-path", &argparse.Option{Help: "email content path", Meta: "PATH"})
 	contentType := parser.String("", "content-type", &argparse.Option{Help: "email content type", Meta: "TYPE", Default: "text/plain"})
-	attach := parser.Strings("", "attach", &argparse.Option{Help: "attach file path list"})
+	attach := parser.Strings("", "attach", &argparse.Option{Help: "attach file path list", Meta: "PATH"})
 	smtp := parser.String("", "smtp", &argparse.Option{Help: "manually set smtp address like: smtp.abc.com:465 it can be auto find if not set",
 		Validate: func(arg string) error {
 			_, port, e := net.SplitHostPort(arg)

@@ -44,31 +44,26 @@ mv easy-mail /usr/local/bin
 ## 使用说明
 
 ```bash
-usage: easy-mail [-h|--help] [-f|--from "<value>"] [-t|--to "<value>"]
-                 [-s|--subject "<value>"] [-c|--content "<value>"]
-                 [--content-path "<value>"] [--content-type "<value>"]
-                 [--attach "<value>" [--attach "<value>" ...]] [--smtp
-                 "<value>"] [--password "<value>"] [-g|--generate] [-a|--auth
-                 "<value>"] [-v|--version]
+usage: easy-mail [-h] [-f FROM] [-t TO [TO ...]] [-s SUBJECT] [-c CONTENT] [--content-path PATH] [--content-type TYPE] [--attach PATH [PATH ...]] [--smtp SMTP] [-p PASSWORD] [-g] [-a PATH] [-v]
 
-                 easily send mail from command line
+easily send mail from command line
 
-Arguments:
+optional arguments:
+  -h, --help                        show this help message
+  -f FROM, --from FROM              email send from
+  -t TO, --to TO                    recv address list
+  -s SUBJECT, --subject SUBJECT     email subject
+  -c CONTENT, --content CONTENT     email content
+  --content-path PATH               email content path
+  --content-type TYPE               email content type
+  --attach PATH                     attach file path list
+  --smtp SMTP                       manually set smtp address like: smtp.abc.com:465 it can be auto find if not set
+  -p PASSWORD, --password PASSWORD  email password
+  -g, --generate                    save auth to file for simple use
+  -a PATH, --auth PATH              auth file path
+  -v, --version                     show version of easy-mail
 
-  -h  --help          Print help information
-  -f  --from          email send from
-  -t  --to            recv address list, separated by ','
-  -s  --subject       email subject
-  -c  --content       email content
-      --content-path  email content path
-      --content-type  email content type
-      --attach        attach file path list
-      --smtp          manually set smtp address like: smtp.abc.com:465 it can
-                      be auto find if not set
-      --password      email password
-  -g  --generate      save auth to file for simple use
-  -a  --auth          auth file path
-  -v  --version       show version of easy-mail
+more info @ https://github.com/hellflame/easy-mail
 ```
 
 #### 1. 选择保存发件账户信息
@@ -76,7 +71,7 @@ Arguments:
 > 如果在特定主机发送邮件，方便以后使用 (推荐优先设定)
 
 ```bash
-easy-mail --from xx@a.b --password you-password --smtp smtp.a.b:587 -g
+easy-mail -f xx@a.b -p you-password --smtp smtp.a.b:587 -g
 ```
 
 执行后将在用户目录下将用户信息存放于 `.easy-mail.cred` ，其中包含用户名，密码以及指定的smtp服务器
@@ -95,13 +90,13 @@ easy-mail -t a@b.c -s 'this is a simple title' -c 'see you tommorow'
 
 以上以 `this is a simple title` 作为主题，向邮箱 `a@b.c` 投递消息，正文为 : `see you tommorow`
 
-* 若需要同时发送给多个邮箱，则可用逗号分隔不同邮箱账户，如：
+* 若需要同时发送给多个邮箱，使用空格隔开即可，命令如下：
 
 ```bash
-easy-mail -t first@b.c,second@d.e
+easy-mail -t user1@b.c user2@d.e
 ```
 
-* 邮件正文可指定内容媒体类型，如 `text/html`
+* 邮件正文可指定内容媒体类型，如 `text/html` , 默认为 `text/plain`
 
 ```bash
 easy-mail -t a@b.c -s 'this is a simple title' -c '<h1>see you <span style="color: red">tommorow</span></h1>' --content-type text/html
@@ -121,9 +116,11 @@ easy-mail -t a@b.c -s 'this is a simple title' --content-path /path/to/file
 easy-mail -t a@b.c -s 'with attaches' -c 'you need to see detail form attaches' --attach /path/attach
 ```
 
-若需要发送多个附件，则再接 `--attach` 参数即可，如：
+可发送多个附件，如：
 
 ```bash
-easy-mail -t a@b.c --attach /path/attach1 --attach /path/attach2
+easy-mail -t a@b.c --attach /path/attach1 /path/attach2
 ```
+
+
 
