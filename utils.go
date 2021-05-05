@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net"
-	"os"
 	"strconv"
 	"strings"
 )
@@ -30,13 +29,6 @@ func fetchMxHosts(mailBox string) []string {
 		hosts = append(hosts, raw.Host[:len(raw.Host)-1])
 	}
 	return hosts
-}
-
-func fileExist(path string) bool {
-	if _, e := os.Stat(path); e != nil {
-		return false
-	}
-	return true
 }
 
 func saveAuth(path, from, password, smtp string) error {

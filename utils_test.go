@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"path"
 	"strings"
 	"testing"
@@ -16,13 +15,6 @@ func Test_fetchMxHosts(t *testing.T) {
 	hosts = fetchMxHosts("abc")
 	if len(hosts) != 0 {
 		t.Error("should be empty")
-		return
-	}
-}
-
-func Test_fileExist(t *testing.T) {
-	if fileExist(fmt.Sprintf("%s/not-exist", t.TempDir())) {
-		t.Error("should not exist")
 		return
 	}
 }

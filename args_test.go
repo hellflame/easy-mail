@@ -121,5 +121,33 @@ func Test_Parse(t *testing.T) {
 		t.Error("failed to parse args")
 		return
 	}
-
+	args, e = parseArgs([]string{"-f", "a@b.com", "-t", "a@b.com", "c@d.e"})
+	if e != nil {
+		t.Errorf(e.Error())
+		return
+	}
+	if args.From != "a@b.com" {
+		t.Error("failed to parse from")
+		return
+	}
+	_, e = parseArgs([]string{"-f", "ab.com"})
+	if e == nil || e.Error() != "invalid email 'ab.com'" {
+		t.Error("validator failed")
+		return
+	}
+	_, e = parseArgs([]string{"--smtp", "124.2.13.1"})
+	if e == nil {
+		t.Error("smtp validator failed")
+		return
+	}
+	_, e = parseArgs([]string{"--smtp", "124.2.13.1:iu"})
+	if e == nil {
+		t.Error("smtp validator failed")
+		return
+	}
+	_, e = parseArgs([]string{"--smtp", "124.2.13.1:456"})
+	if e != nil {
+		t.Error("smtp validator failed")
+		return
+	}
 }

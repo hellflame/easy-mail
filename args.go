@@ -64,9 +64,13 @@ func parseArgs(input []string) (args *RawArgs, e error) {
 	attach := parser.Strings("", "attach", &argparse.Option{Help: "attach file path list"})
 	smtp := parser.String("", "smtp", &argparse.Option{Help: "manually set smtp address like: smtp.abc.com:465 it can be auto find if not set",
 		Validate: func(arg string) error {
-			_, _, e := net.SplitHostPort(arg)
+			_, port, e := net.SplitHostPort(arg)
 			if e != nil {
 				return fmt.Errorf("invalid smtp server: %s", e.Error())
+			}
+			_, e = strconv.Atoi(port)
+			if e != nil {
+				return e
 			}
 			return nil
 		}})
@@ -76,8 +80,7 @@ func parseArgs(input []string) (args *RawArgs, e error) {
 	showVersion := parser.Flag("v", "version", &argparse.Option{Help: fmt.Sprintf("show version of %s", NAME)})
 	e = parser.Parse(input)
 	if e != nil {
-		fmt.Println(e.Error())
-		return
+		return nil, e
 	}
 	args = &RawArgs{
 		From:         *from,
