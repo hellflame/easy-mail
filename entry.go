@@ -3,11 +3,11 @@ package main
 import (
 	"errors"
 	"fmt"
-	"gopkg.in/gomail.v2"
+	"github.com/hellflame/easy-mail/gomail"
 )
 
 const NAME = "easy-mail"
-const VERSION = "v0.4.1"
+const VERSION = "v0.5.0"
 
 func Run(args *TidyArgs) error {
 	if args.GenerateAuth {
