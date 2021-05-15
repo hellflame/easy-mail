@@ -5,6 +5,7 @@ BINARY_NAME = easy-mail
 build: darwin linux windows
 
 tidy:
+	go mod tidy
 	find . -name "*.go" -type f -not -path "./vendor/*" | xargs -n1 go fmt
 
 dist:
