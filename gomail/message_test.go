@@ -248,8 +248,8 @@ func TestAttachmentOnly(t *testing.T) {
 		to:   []string{"to@example.com"},
 		content: "From: from@example.com\r\n" +
 			"To: to@example.com\r\n" +
-			"Content-Type: application/pdf; name=\"test.pdf\"\r\n" +
-			"Content-Disposition: attachment; filename=\"test.pdf\"\r\n" +
+			"Content-Type: application/pdf; name=\"=?UTF-8?B?dGVzdC5wZGY=?=\"\r\n" +
+			"Content-Disposition: attachment; filename=\"=?UTF-8?B?dGVzdC5wZGY=?=\"\r\n" +
 			"Content-Transfer-Encoding: base64\r\n" +
 			"\r\n" +
 			base64.StdEncoding.EncodeToString([]byte("Content of test.pdf")),
@@ -279,8 +279,8 @@ func TestAttachment(t *testing.T) {
 			"\r\n" +
 			"Test\r\n" +
 			"--_BOUNDARY_1_\r\n" +
-			"Content-Type: application/pdf; name=\"test.pdf\"\r\n" +
-			"Content-Disposition: attachment; filename=\"test.pdf\"\r\n" +
+			"Content-Type: application/pdf; name=\"=?UTF-8?B?dGVzdC5wZGY=?=\"\r\n" +
+			"Content-Disposition: attachment; filename=\"=?UTF-8?B?dGVzdC5wZGY=?=\"\r\n" +
 			"Content-Transfer-Encoding: base64\r\n" +
 			"\r\n" +
 			base64.StdEncoding.EncodeToString([]byte("Content of test.pdf")) + "\r\n" +
@@ -313,8 +313,8 @@ func TestRename(t *testing.T) {
 			"\r\n" +
 			"Test\r\n" +
 			"--_BOUNDARY_1_\r\n" +
-			"Content-Type: application/pdf; name=\"another.pdf\"\r\n" +
-			"Content-Disposition: attachment; filename=\"another.pdf\"\r\n" +
+			"Content-Type: application/pdf; name=\"=?UTF-8?B?YW5vdGhlci5wZGY=?=\"\r\n" +
+			"Content-Disposition: attachment; filename=\"=?UTF-8?B?YW5vdGhlci5wZGY=?=\"\r\n" +
 			"Content-Transfer-Encoding: base64\r\n" +
 			"\r\n" +
 			base64.StdEncoding.EncodeToString([]byte("Content of test.pdf")) + "\r\n" +
@@ -340,14 +340,14 @@ func TestAttachmentsOnly(t *testing.T) {
 			" boundary=_BOUNDARY_1_\r\n" +
 			"\r\n" +
 			"--_BOUNDARY_1_\r\n" +
-			"Content-Type: application/pdf; name=\"test.pdf\"\r\n" +
-			"Content-Disposition: attachment; filename=\"test.pdf\"\r\n" +
+			"Content-Type: application/pdf; name=\"=?UTF-8?B?dGVzdC5wZGY=?=\"\r\n" +
+			"Content-Disposition: attachment; filename=\"=?UTF-8?B?dGVzdC5wZGY=?=\"\r\n" +
 			"Content-Transfer-Encoding: base64\r\n" +
 			"\r\n" +
 			base64.StdEncoding.EncodeToString([]byte("Content of test.pdf")) + "\r\n" +
 			"--_BOUNDARY_1_\r\n" +
-			"Content-Type: application/zip; name=\"test.zip\"\r\n" +
-			"Content-Disposition: attachment; filename=\"test.zip\"\r\n" +
+			"Content-Type: application/zip; name=\"=?UTF-8?B?dGVzdC56aXA=?=\"\r\n" +
+			"Content-Disposition: attachment; filename=\"=?UTF-8?B?dGVzdC56aXA=?=\"\r\n" +
 			"Content-Transfer-Encoding: base64\r\n" +
 			"\r\n" +
 			base64.StdEncoding.EncodeToString([]byte("Content of test.zip")) + "\r\n" +
@@ -379,14 +379,14 @@ func TestAttachments(t *testing.T) {
 			"\r\n" +
 			"Test\r\n" +
 			"--_BOUNDARY_1_\r\n" +
-			"Content-Type: application/pdf; name=\"test.pdf\"\r\n" +
-			"Content-Disposition: attachment; filename=\"test.pdf\"\r\n" +
+			"Content-Type: application/pdf; name=\"=?UTF-8?B?dGVzdC5wZGY=?=\"\r\n" +
+			"Content-Disposition: attachment; filename=\"=?UTF-8?B?dGVzdC5wZGY=?=\"\r\n" +
 			"Content-Transfer-Encoding: base64\r\n" +
 			"\r\n" +
 			base64.StdEncoding.EncodeToString([]byte("Content of test.pdf")) + "\r\n" +
 			"--_BOUNDARY_1_\r\n" +
-			"Content-Type: application/zip; name=\"test.zip\"\r\n" +
-			"Content-Disposition: attachment; filename=\"test.zip\"\r\n" +
+			"Content-Type: application/zip; name=\"=?UTF-8?B?dGVzdC56aXA=?=\"\r\n" +
+			"Content-Disposition: attachment; filename=\"=?UTF-8?B?dGVzdC56aXA=?=\"\r\n" +
 			"Content-Transfer-Encoding: base64\r\n" +
 			"\r\n" +
 			base64.StdEncoding.EncodeToString([]byte("Content of test.zip")) + "\r\n" +
@@ -418,15 +418,15 @@ func TestEmbedded(t *testing.T) {
 			"\r\n" +
 			"Test\r\n" +
 			"--_BOUNDARY_1_\r\n" +
-			"Content-Type: image/jpeg; name=\"image1.jpg\"\r\n" +
-			"Content-Disposition: inline; filename=\"image1.jpg\"\r\n" +
+			"Content-Type: image/jpeg; name=\"=?UTF-8?B?aW1hZ2UxLmpwZw==?=\"\r\n" +
+			"Content-Disposition: inline; filename=\"=?UTF-8?B?aW1hZ2UxLmpwZw==?=\"\r\n" +
 			"Content-ID: <test-content-id>\r\n" +
 			"Content-Transfer-Encoding: base64\r\n" +
 			"\r\n" +
 			base64.StdEncoding.EncodeToString([]byte("Content of image1.jpg")) + "\r\n" +
 			"--_BOUNDARY_1_\r\n" +
-			"Content-Type: image/jpeg; name=\"image2.jpg\"\r\n" +
-			"Content-Disposition: inline; filename=\"image2.jpg\"\r\n" +
+			"Content-Type: image/jpeg; name=\"=?UTF-8?B?aW1hZ2UyLmpwZw==?=\"\r\n" +
+			"Content-Disposition: inline; filename=\"=?UTF-8?B?aW1hZ2UyLmpwZw==?=\"\r\n" +
 			"Content-ID: <image2.jpg>\r\n" +
 			"Content-Transfer-Encoding: base64\r\n" +
 			"\r\n" +
@@ -475,8 +475,8 @@ func TestFullMessage(t *testing.T) {
 			"--_BOUNDARY_3_--\r\n" +
 			"\r\n" +
 			"--_BOUNDARY_2_\r\n" +
-			"Content-Type: image/jpeg; name=\"image.jpg\"\r\n" +
-			"Content-Disposition: inline; filename=\"image.jpg\"\r\n" +
+			"Content-Type: image/jpeg; name=\"=?UTF-8?B?aW1hZ2UuanBn?=\"\r\n" +
+			"Content-Disposition: inline; filename=\"=?UTF-8?B?aW1hZ2UuanBn?=\"\r\n" +
 			"Content-ID: <image.jpg>\r\n" +
 			"Content-Transfer-Encoding: base64\r\n" +
 			"\r\n" +
@@ -484,8 +484,8 @@ func TestFullMessage(t *testing.T) {
 			"--_BOUNDARY_2_--\r\n" +
 			"\r\n" +
 			"--_BOUNDARY_1_\r\n" +
-			"Content-Type: application/pdf; name=\"test.pdf\"\r\n" +
-			"Content-Disposition: attachment; filename=\"test.pdf\"\r\n" +
+			"Content-Type: application/pdf; name=\"=?UTF-8?B?dGVzdC5wZGY=?=\"\r\n" +
+			"Content-Disposition: attachment; filename=\"=?UTF-8?B?dGVzdC5wZGY=?=\"\r\n" +
 			"Content-Transfer-Encoding: base64\r\n" +
 			"\r\n" +
 			base64.StdEncoding.EncodeToString([]byte("Content of test.pdf")) + "\r\n" +
