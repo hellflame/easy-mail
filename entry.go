@@ -7,7 +7,7 @@ import (
 )
 
 const NAME = "easy-mail"
-const VERSION = "v0.5.2"
+const VERSION = "v0.5.3"
 
 func Run(args *TidyArgs) error {
 	if args.GenerateAuth {

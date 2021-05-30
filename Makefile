@@ -2,7 +2,7 @@
 BINARY_PATH = ./dist/$(version)
 BINARY_NAME = easy-mail
 
-build: darwin linux windows
+build: tidy clean darwin linux windows
 
 tidy:
 	go mod tidy
