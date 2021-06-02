@@ -55,14 +55,14 @@ func parseArgs(input []string) (args *RawArgs, e error) {
 	}
 	parser := argparse.NewParser(NAME, "easily send mail from command line",
 		&argparse.ParserConfig{EpiLog: "more info @ https://github.com/hellflame/easy-mail", AddShellCompletion: true})
-	from := parser.String("f", "from", &argparse.Option{Help: "email send from", Validate: emailValidator})
-	to := parser.Strings("t", "to", &argparse.Option{Help: "recv address list", Validate: emailValidator})
-	subject := parser.String("s", "subject", &argparse.Option{Help: "email subject"})
-	content := parser.String("c", "content", &argparse.Option{Help: "email content"})
-	contentPath := parser.String("", "content-path", &argparse.Option{Help: "email content path", Meta: "PATH"})
-	contentType := parser.String("", "content-type", &argparse.Option{Help: "email content type", Meta: "TYPE", Default: "text/plain"})
-	attach := parser.Strings("", "attach", &argparse.Option{Help: "attach file path list", Meta: "PATH"})
-	smtp := parser.String("", "smtp", &argparse.Option{Help: "manually set smtp address like: smtp.abc.com:465 it can be auto find if not set",
+	from := parser.String("f", "from", &argparse.Option{Help: "email send from", Validate: emailValidator, Group: "Email Options"})
+	to := parser.Strings("t", "to", &argparse.Option{Help: "recv address list", Validate: emailValidator, Group: "Email Options"})
+	subject := parser.String("s", "subject", &argparse.Option{Help: "email subject", Group: "Email Options"})
+	content := parser.String("c", "content", &argparse.Option{Help: "email content", Group: "Email Options"})
+	contentPath := parser.String("", "content-path", &argparse.Option{Help: "email content path", Meta: "PATH", Group: "Email Options"})
+	contentType := parser.String("", "content-type", &argparse.Option{Help: "email content type", Meta: "TYPE", Default: "text/plain", Group: "Email Options"})
+	attach := parser.Strings("", "attach", &argparse.Option{Help: "attach file path list", Meta: "PATH", Group: "Email Options"})
+	smtp := parser.String("", "smtp", &argparse.Option{Help: "manually set smtp address like: smtp.abc.com:465 it can be auto find if not set", Group: "Authorize",
 		Validate: func(arg string) error {
 			_, port, e := net.SplitHostPort(arg)
 			if e != nil {
@@ -74,9 +74,9 @@ func parseArgs(input []string) (args *RawArgs, e error) {
 			}
 			return nil
 		}})
-	password := parser.String("p", "password", &argparse.Option{Help: "email password"})
-	generateAuth := parser.Flag("g", "generate", &argparse.Option{Help: "save auth to file for simple use"})
-	authPath := parser.String("a", "auth", &argparse.Option{Help: "auth file path", Default: DefaultAuthPath, Meta: "PATH"})
+	password := parser.String("p", "password", &argparse.Option{Help: "email password", Group: "Authorize"})
+	generateAuth := parser.Flag("g", "generate", &argparse.Option{Help: "save auth to file for simple use", Group: "Authorize"})
+	authPath := parser.String("a", "auth", &argparse.Option{Help: "auth file path", Default: DefaultAuthPath, Meta: "PATH", Group: "Authorize"})
 	showVersion := parser.Flag("v", "version", &argparse.Option{Help: fmt.Sprintf("show version of %s", NAME)})
 	e = parser.Parse(input)
 	if e != nil {
