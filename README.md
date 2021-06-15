@@ -44,24 +44,29 @@ mv easy-mail /usr/local/bin
 ## 使用说明
 
 ```bash
-usage: easy-mail [-h] [-f FROM] [-t TO [TO ...]] [-s SUBJECT] [-c CONTENT] [--content-path PATH] [--content-type TYPE] [--attach PATH [PATH ...]] [--smtp SMTP] [-p PASSWORD] [-g] [-a PATH] [-v]
+usage: easy-mail [--help] [--completion] [--from FROM] [--to TO [TO ...]] [--subject SUBJECT] [--content CONTENT] [--content-path PATH] [--content-type TYPE] [--attach PATH [PATH ...]] [--smtp SMTP] [--password PASSWORD] [--generate] [--auth PATH] [--version] 
 
 easily send mail from command line
 
 optional arguments:
-  -h, --help                        show this help message
-  -f FROM, --from FROM              email send from
-  -t TO, --to TO                    recv address list
-  -s SUBJECT, --subject SUBJECT     email subject
-  -c CONTENT, --content CONTENT     email content
+  --help, -h                        show this help message
+  --completion                      show command completion script
+  --version, -v                     show version of easy-mail
+
+Email Options:
+  --from FROM, -f FROM              email send from
+  --to TO, -t TO                    recv address list
+  --subject SUBJECT, -s SUBJECT     email subject
+  --content CONTENT, -c CONTENT     email content
   --content-path PATH               email content path
   --content-type TYPE               email content type
   --attach PATH                     attach file path list
+
+Authorize:
   --smtp SMTP                       manually set smtp address like: smtp.abc.com:465 it can be auto find if not set
-  -p PASSWORD, --password PASSWORD  email password
-  -g, --generate                    save auth to file for simple use
-  -a PATH, --auth PATH              auth file path
-  -v, --version                     show version of easy-mail
+  --password PASSWORD, -p PASSWORD  email password
+  --generate, -g                    save auth to file for simple use
+  --auth PATH, -a PATH              auth file path
 
 more info @ https://github.com/hellflame/easy-mail
 ```
