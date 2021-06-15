@@ -2,4 +2,4 @@ module github.com/hellflame/easy-mail
 
 go 1.16
 
-require github.com/hellflame/argparse v1.2.2
+require github.com/hellflame/argparse v1.4.1
