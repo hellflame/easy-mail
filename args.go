@@ -53,8 +53,10 @@ func parseArgs(input []string) (args *RawArgs, e error) {
 		}
 		return nil
 	}
-	parser := argparse.NewParser(NAME, "easily send mail from command line",
-		&argparse.ParserConfig{EpiLog: "more info @ https://github.com/hellflame/easy-mail", AddShellCompletion: true})
+	parser := argparse.NewParser(NAME, "send mail from command line with ease",
+		&argparse.ParserConfig{
+			EpiLog:             "more info @ https://github.com/hellflame/easy-mail",
+			AddShellCompletion: true})
 	from := parser.String("f", "from", &argparse.Option{Help: "email send from", Validate: emailValidator, Group: "Email Options"})
 	to := parser.Strings("t", "to", &argparse.Option{Help: "recv address list", Validate: emailValidator, Group: "Email Options"})
 	subject := parser.String("s", "subject", &argparse.Option{Help: "email subject", Group: "Email Options"})
